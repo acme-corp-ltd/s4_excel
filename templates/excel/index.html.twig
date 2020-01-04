@@ -1,9 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ExcelController!{% endblock %}
+{% block title %}Extract{% endblock %}
 
 {% block body %}
-<div>
-    {{ dump(data) }}
-</div>
+    <div>
+        {% set temp = data|first %}
+        {% set fields = temp|keys %}
+        <table>
+            <tr>
+                {% for property_title in fields %}
+                    <th>{{ property_title }}</th>
+                {% endfor %}
+            </tr>
+            {% for item in data %}
+                <tr>
+                    {% for field in fields %}
+                        <td>{{ attribute(item, field) }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 {% endblock %}

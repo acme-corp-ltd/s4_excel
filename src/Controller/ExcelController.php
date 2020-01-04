@@ -7,18 +7,19 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ExcelController extends AbstractFOSRestController
 {
     /**
-     * @Route("/excel", name="excel")
+     * @Route("/extract", name="extract", methods={"post"})
      * @param Request $request
      * @param DataExtractorInterface $extractor
      * @return View
      */
-    public function index(Request $request, DataExtractorInterface $extractor)
+    public function extract(Request $request, DataExtractorInterface $extractor)
     {
         if($request->files->count() !== 1) {
             throw new BadRequestHttpException('file missing');
@@ -30,7 +31,15 @@ class ExcelController extends AbstractFOSRestController
         $data = $extractor->extract($path);
 
         return $this->view($data, 200)
-            ->setTemplate("excel/index.html.twig")
+            ->setTemplate('excel/index.html.twig')
             ->setTemplateVar('data');
+    }
+
+    /**
+     * @Route("/form", name="form")
+     * @return Response
+     */
+    public function form(): Response {
+        return $this->render('excel/form.html.twig');
     }
 }
