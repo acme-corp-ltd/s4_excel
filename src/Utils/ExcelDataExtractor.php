@@ -15,7 +15,7 @@ use Box\Spout\Reader\XLSX\Sheet;
 class ExcelDataExtractor implements DataExtractorInterface
 {
 
-    private static function getActiveSheet(Reader $reader): Sheet {
+    public static function getActiveSheet(Reader $reader): Sheet {
         try {
             $sheetIterator = $reader->getSheetIterator();
         } catch (ReaderNotOpenedException $e) {
@@ -31,14 +31,14 @@ class ExcelDataExtractor implements DataExtractorInterface
         throw new DataExtractorException();
     }
 
-    private static function getCellValues(Row $row): array {
+    public static function getCellValues(Row $row): array {
         $cells = $row->getCells();
         return array_map(function(Cell $cell){
             return $cell->getValue();
         }, $cells);
     }
 
-    private static function structureData(array $rawData): array {
+    public static function structureData(array $rawData): array {
         $headline = array_shift($rawData);
         return array_map(function ($item) use ($headline) {
             return array_combine($headline, $item);
